@@ -27,7 +27,9 @@ resource "aws_security_group" "sg" {
 
   }
 
-  tags = "${var.name}-${var.env}-sg"
+  tags = {
+    Name = "${var.name}-${var.env}-sg"
+  }
 }
 
 
