@@ -5,8 +5,8 @@ resource "aws_security_group" "sg" {
 
   ingress {
     description = "APP"
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = var.app_port
+    to_port     = var.app_port
     protocol    = "tcp"
     cidr_blocks = var.allow_app_cidr
 
@@ -38,6 +38,13 @@ resource "aws_launch_template" "template" {
   image_id      = data.aws_ami.ami.id
   instance_type = var.instance_type
   vpc_security_group_ids = [ aws_security_group.sg.id ]
+  user_data = base64encode(templatefile("${path.module}/userdata.sh", {
+    name = var.name
+    env  = var.env
+  }))
+  iam_instance_profile {
+    name = aws_iam_instance_profile.instance_profile.name
+  }
 }
 
 resource "aws_autoscaling_group" "asg" {
