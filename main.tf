@@ -92,6 +92,6 @@ resource "aws_route53_record" "main" {
   zone_id = var.domain_id
   name    = local.dns_name
   type    = "CNAME"
-  ttl     = 300
+  ttl     = 30
   records = [var.lb_dns_name]
 }
